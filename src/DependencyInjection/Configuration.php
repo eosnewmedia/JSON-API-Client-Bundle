@@ -37,6 +37,11 @@ class Configuration implements ConfigurationInterface
             ->defaultNull()
             ->info('The service id for the service which is an instance of HttpClientInterface and should be used for all requests with this client. Can be empty guzzle is configured and should be used.');
 
+
+        $client->scalarNode('logger')
+            ->defaultNull()
+            ->info('The psr-3 compatible logger service which should be used by this api client');
+
         $http = $root->arrayNode('http_clients')
             ->addDefaultsIfNotSet()
             ->children();
@@ -45,7 +50,9 @@ class Configuration implements ConfigurationInterface
             ->defaultNull()
             ->info('The guzzle http client service which should be used for the default http client (guzzle adapter).');
 
-        $root->scalarNode('logger')->defaultNull();
+        $root->scalarNode('logger')
+            ->defaultNull()
+            ->info('The psr-3 compatible logger service which should be used by your api clients.');
 
         return $treeBuilder;
     }

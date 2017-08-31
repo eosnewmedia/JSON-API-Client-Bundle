@@ -28,7 +28,11 @@ class EnmJsonApiClientBundleTest extends TestCase
                 'enm_json_api_client' => [
                     'clients' => [
                         'test' => [
-                            'base_uri' => 'http://example.com'
+                            'base_uri' => 'http://example.com/api'
+                        ],
+                        'api' => [
+                            'base_uri' => 'http://example.com/secondApi',
+                            'logger' => 'logger'
                         ]
                     ],
                     'http_clients' => [
@@ -44,7 +48,6 @@ class EnmJsonApiClientBundleTest extends TestCase
 
         $container->compile();
 
-        self::assertFalse($container->has('enm.json_api_client.clients.test')); // private service should not be available
         self::assertInstanceOf(
             JsonApiClient::class,
             $container->get('enm.json_api_client.clients')->apiClient('test')

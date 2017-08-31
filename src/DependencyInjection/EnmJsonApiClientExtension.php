@@ -28,15 +28,17 @@ class EnmJsonApiClientExtension extends ConfigurableExtension
         // configure default client if guzzle service is available via configuration
         $guzzleService = (string)$mergedConfig['http_clients']['guzzle'];
         if ($guzzleService !== '' && $container->hasDefinition($guzzleService)) {
-            $container->setDefinition(
-                self::GUZZLE_ADAPTER_SERVICE,
-                new Definition(
-                    GuzzleAdapter::class,
-                    [
-                        new Reference($guzzleService)
-                    ]
-                )
+            $guzzleAdapter = new Definition(
+                GuzzleAdapter::class,
+                [
+                    new Reference($guzzleService)
+                ]
             );
+
+            $guzzleAdapter->setPublic(false);
+            $guzzleAdapter->setLazy(true);
+
+            $container->setDefinition(self::GUZZLE_ADAPTER_SERVICE, $guzzleAdapter);
         }
 
         // configure a json api client for each configuration
@@ -56,9 +58,13 @@ class EnmJsonApiClientExtension extends ConfigurableExtension
             );
 
             $client->setPublic(false);
+            $client->setLazy(true);
             $client->addTag('json_api_client.client', ['client_name' => $name]);
 
-            if ($logger !== '' && $container->hasDefinition($logger)) {
+            $clientLogger = (string)$configuration['logger'];
+            if ($clientLogger !== '' && $container->hasDefinition($clientLogger)) {
+                $client->addMethodCall('setLogger', [new Reference($clientLogger)]);
+            } elseif ($logger !== '' && $container->hasDefinition($logger)) {
                 $client->addMethodCall('setLogger', [new Reference($logger)]);
             }
 
