@@ -8,7 +8,7 @@
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-    <testsuite name="Json Api Bundle">
+    <testsuite name="Json Api Client Bundle">
         <directory suffix="Test.php">tests</directory>
     </testsuite>
 
