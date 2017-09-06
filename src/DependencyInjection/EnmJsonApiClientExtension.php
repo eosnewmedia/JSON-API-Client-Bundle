@@ -27,7 +27,7 @@ class EnmJsonApiClientExtension extends ConfigurableExtension
     {
         // configure default client if guzzle service is available via configuration
         $guzzleService = (string)$mergedConfig['http_clients']['guzzle'];
-        if ($guzzleService !== '' && $container->hasDefinition($guzzleService)) {
+        if ($guzzleService !== '') {
             $guzzleAdapter = new Definition(
                 GuzzleAdapter::class,
                 [
