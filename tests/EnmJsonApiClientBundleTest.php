@@ -7,21 +7,20 @@ use Enm\Bundle\JsonApi\Client\DependencyInjection\EnmJsonApiClientExtension;
 use Enm\Bundle\JsonApi\Client\EnmJsonApiClientBundle;
 use Enm\JsonApi\Client\JsonApiClient;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 class EnmJsonApiClientBundleTest extends TestCase
 {
-    public function testConfigurationWithDefaultClient()
+    public function testConfigurationWithDefaultClient(): void
     {
         $container = new ContainerBuilder();
-        $container->setDefinition('guzzle', new Definition(Client::class));
-        $container->setDefinition('logger', new Definition(NullLogger::class));
+        $container->autowire(Client::class);
+        $container->setAlias(ClientInterface::class, Client::class);
 
         (new EnmJsonApiClientExtension())->load(
             [
@@ -32,13 +31,8 @@ class EnmJsonApiClientBundleTest extends TestCase
                         ],
                         'api' => [
                             'base_uri' => 'http://example.com/secondApi',
-                            'logger' => 'logger'
                         ]
                     ],
-                    'http_clients' => [
-                        'guzzle' => 'guzzle'
-                    ],
-                    'logger' => 'logger'
                 ]
             ],
             $container
@@ -46,11 +40,12 @@ class EnmJsonApiClientBundleTest extends TestCase
 
         (new EnmJsonApiClientBundle())->build($container);
 
-        $container->compile();
-
-        self::assertInstanceOf(
-            JsonApiClient::class,
-            $container->get('enm.json_api_client.clients')->apiClient('test')
-        );
+        self::assertTrue($container->hasDefinition('enm.json_api_client.test'));
+        self::assertEquals(JsonApiClient::class, $container->getDefinition('enm.json_api_client.test')->getClass());
+        try {
+            $container->compile();
+        } catch (\Exception $e) {
+            self::fail($e->getMessage());
+        }
     }
 }
