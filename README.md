@@ -1,8 +1,6 @@
 JSON API Client Bundle
 ======================
 
-[![Build Status](https://travis-ci.org/eosnewmedia/JSON-API-Client-Bundle.svg?branch=master)](https://travis-ci.org/eosnewmedia/JSON-API-Client-Bundle)
-
 The Symfony integration for [enm/json-api-client](https://eosnewmedia.github.io/JSON-API-Client/).
 
 1. [Installation](#installation)
@@ -15,20 +13,13 @@ The Symfony integration for [enm/json-api-client](https://eosnewmedia.github.io/
 composer require enm/json-api-client
 ```
 
-If you want to use the default http client (guzzle adapter) you could use
-```bash
-composer require eightpoints/guzzle-bundle
-```
-or
-```bash
-composer require e-moe/guzzle6-bundle
+It's recommended to install `kriswallsmith/buzz` as http-client and `nyholm/psr7` for http factories.
+
+```sh
+composer require kriswallsmith/buzz nyholm/psr7
 ```
 
-If you want to use the buzz curl adapter you should
-```bash
-composer require kriswallsmith/buzz
-```
-register an instance of `Buzz\Client\Curl` as service and configure your client to use `Enm\JsonApi\Client\HttpClient\BuzzCurlAdapter`.
+You can also use any HTTP client which implements [PSR-18](https://www.php-fig.org/psr/psr-18/).
 
 ## Configuration
 
@@ -45,9 +36,7 @@ register an instance of `Buzz\Client\Curl` as service and configure your client 
 ```yaml
 enm_json_api_client:
     clients: # requires at least one element, the key will be your client name
-        api:
-            base_uri: 'http://example.com/api' # the base uri used with this api client
-            http_client: 'your_client_service' # optional, the service id of your service which implements Enm\JsonApi\Client\HttpClient\HttpClientInterface"; if not configured the bundle tries to use guzzle as default
+        api: 'http://example.com/api'
 ```
 
 ## Usage
