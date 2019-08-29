@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
         $root->arrayNode('clients')
             ->useAttributeAsKey('name')
             ->requiresAtLeastOneElement()
-            ->prototype('string')
+            ->prototype('scalar')
             ->info('The base uri which should be used on api calls.');
 
         return $treeBuilder;
