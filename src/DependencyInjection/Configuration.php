@@ -18,8 +18,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('enm_json_api_client')->children();
+        $treeBuilder = new TreeBuilder('enm_json_api_client');
+        $root = $treeBuilder->getRootNode()->children();
 
         $root->arrayNode('clients')
             ->useAttributeAsKey('name')
