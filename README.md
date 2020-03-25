@@ -10,7 +10,7 @@ The Symfony integration for [enm/json-api-client](https://eosnewmedia.github.io/
 ## Installation
 
 ```bash
-composer require enm/json-api-client
+composer require enm/json-api-client-bundle
 ```
 
 It's recommended to install `kriswallsmith/buzz` as http-client and `nyholm/psr7` for http factories.
